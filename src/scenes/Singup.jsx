@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import { initializeApp } from 'firebase/app'
-import { getAuth,signInWithEmailAndPassword, GoogleAuthProvider, 
-    signInWithPopup  } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword  } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDjUYqnfkS8IoqnvEA_eA4_mebjZX-TwaY",
@@ -12,31 +11,22 @@ const firebaseConfig = {
     appId: "1:1078389456014:web:b9033cebd316681cb95ddf"
   };
 
-export default function Login({setUser}) {
+export default function Signup({setUser}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const handleLogin = async (e) =>{
+    const handleSignup = async (e) =>{
         e.preventDefault()
         const app = initializeApp(firebaseConfig) // contects to firebase
         const auth = getAuth(app) // connect us to Firebase Auth
-        const response = await signInWithEmailAndPassword(auth, email, password)
+        const response = await createUserWithEmailAndPassword(auth, email, password)
         .catch(alert)
      setUser(response.user)
     }
 
-    const handleGoogleLogin = async () => {
-        const app = initializeApp(firebaseConfig) // contects to firebase
-        const auth = getAuth(app) // connect us to Firebase Auth   
-        const provider = new GoogleAuthProvider()
-        const response = await signInWithPopup(auth, provider)
-        .catch(alert)
-        setUser(response.user)
-    }
-
   return (
     <>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
+      <h1>Signup</h1>
+      <form onSubmit={handleSignup}>
         <label htmlFor="email">
           Email:{""}
           <input type="email" name="email"
@@ -53,10 +43,8 @@ export default function Login({setUser}) {
             placeholder="......"/>
         </label>
         <br />
-        <button type="submit">Login</button>
+        <button type="submit">Signup</button>
       </form>
-      <br/>
-      <button onClick={handleGoogleLogin}>Sign in with Google</button>
     </>
   )
 }
